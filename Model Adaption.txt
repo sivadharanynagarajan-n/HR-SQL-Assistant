@@ -1,0 +1,16 @@
+After downloading the hr_sql_merger
+
+IN COMMAND PROMPT
+
+git clone https://github.com/ggerganov/llama.cpp
+
+python convert_hf_to_gguf.py C:\Users\DQ5029\Default\Downloads\hr_sql_merged --outfile hr_sql.fp16.gguf --outtype f16
+
+In to the cmd of the llama folder
+
+llama-quantize.exe hr_sql.fp16.gguf hr_sql.Q4_K_M.gguf Q4_K_M
+
+Then in the main folder:
+
+ollama create <model name> -f "Modelfile"
+ollama run

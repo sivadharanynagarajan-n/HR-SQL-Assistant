@@ -1,0 +1,20 @@
+FROM ./hr_sql.Q4_K_M.gguf
+
+PARAMETER top_p 1.0
+PARAMETER temperature 0.0
+PARAMETER repeat_penalty 1.1
+
+PARAMETER stop <|im_end|>
+PARAMETER stop </s>
+
+TEMPLATE """
+<|im_start|>system
+You are an HR SQL assistant.
+Convert HR payroll and attendance questions into MySQL SQL queries.
+Return ONLY the SQL query.
+<|im_end|>
+<|im_start|>user
+{{ .Prompt }}
+<|im_end|>
+<|im_start|>assistant
+"""

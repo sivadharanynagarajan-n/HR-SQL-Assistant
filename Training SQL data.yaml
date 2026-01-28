@@ -1,0 +1,227 @@
+metadata:
+  domain: hr_payroll_nl2sql
+  description: Convert HR payroll and attendance questions into SQL queries
+  sql_dialect: MySQL
+
+examples:
+  - system: You are an HR SQL assistant. Convert HR-related questions into SQL queries.
+    user: Show all employees
+    assistant: SELECT * FROM employees;
+
+  - system: You are an HR SQL assistant. Convert HR-related questions into SQL queries.
+    user: List employee names and departments
+    assistant: SELECT name, department FROM employees;
+
+  - system: You are an HR SQL assistant. Convert HR-related questions into SQL queries.
+    user: How many employees are currently active?
+    assistant: SELECT COUNT(*) FROM employees WHERE status = 'Active';
+
+  - system: You are an HR SQL assistant. Convert HR-related questions into SQL queries.
+    user: Show employees who joined after 2022
+    assistant: SELECT * FROM employees WHERE joining_date > '2022-12-31';
+
+  - system: You are an HR SQL assistant. Convert HR-related questions into SQL queries.
+    user: Show employees from the IT department
+    assistant: SELECT * FROM employees WHERE department = 'IT';
+
+  - system: You are an HR SQL assistant. Convert HR-related questions into SQL queries.
+    user: What is the average salary of employees?
+    assistant: SELECT AVG(salary) FROM employees;
+
+  - system: You are an HR SQL assistant. Convert HR-related questions into SQL queries.
+    user: Show highest paid employee
+    assistant: |
+      SELECT name, salary
+      FROM employees
+      ORDER BY salary DESC
+      LIMIT 1;
+
+  - system: You are an HR SQL assistant. Convert HR-related questions into SQL queries.
+    user: Show employees who were absent today
+    assistant: |
+      SELECT e.name
+      FROM employees e
+      JOIN attendance a ON e.emp_id = a.emp_id
+      WHERE a.date = CURDATE()
+      AND a.status = 'Absent';
+
+  - system: You are an HR SQL assistant. Convert HR-related questions into SQL queries.
+    user: Show attendance details for employee John Doe
+    assistant: |
+      SELECT a.date, a.status, a.hours_worked
+      FROM attendance a
+      JOIN employees e ON a.emp_id = e.emp_id
+      WHERE e.name = 'John Doe';
+
+  - system: You are an HR SQL assistant. Convert HR-related questions into SQL queries.
+    user: How many days was John Doe absent?
+    assistant: |
+      SELECT COUNT(*)
+      FROM attendance a
+      JOIN employees e ON a.emp_id = e.emp_id
+      WHERE e.name = 'John Doe'
+      AND a.status = 'Absent';
+
+  - system: You are an HR SQL assistant. Convert HR-related questions into SQL queries.
+    user: Show total working hours for each employee
+    assistant: |
+      SELECT emp_id, SUM(hours_worked) AS total_hours
+      FROM attendance
+      GROUP BY emp_id;
+
+  - system: You are an HR SQL assistant. Convert HR-related questions into SQL queries.
+    user: Show payroll details for March 2024
+    assistant: SELECT * FROM payroll WHERE month = 'March' AND year = 2024;
+
+  - system: You are an HR SQL assistant. Convert HR-related questions into SQL queries.
+    user: What is the total payroll cost for March 2024?
+    assistant: SELECT SUM(net_salary) FROM payroll WHERE month = 'March' AND year = 2024;
+
+  - system: You are an HR SQL assistant. Convert HR-related questions into SQL queries.
+    user: Show employees whose salary is above 100000
+    assistant: SELECT name, salary FROM employees WHERE salary > 100000;
+
+  - system: You are an HR SQL assistant. Convert HR-related questions into SQL queries.
+    user: Show employees who took leave more than 5 days
+    assistant: |
+      SELECT e.name, COUNT(*) AS leave_days
+      FROM attendance a
+      JOIN employees e ON a.emp_id = e.emp_id
+      WHERE a.status = 'Leave'
+      GROUP BY e.name
+      HAVING leave_days > 5;
+
+  - system: You are an HR SQL assistant. Convert HR-related questions into SQL queries.
+    user: Show net salary of each employee for 2024
+    assistant: |
+      SELECT emp_id, SUM(net_salary) AS yearly_salary
+      FROM payroll
+      WHERE year = 2024
+      GROUP BY emp_id;
+  - system: You are an HR SQL assistant. Convert HR-related questions into SQL queries.
+    user: Show employees who joined in 2023
+    assistant: |
+      SELECT *
+      FROM employees
+      WHERE YEAR(joining_date) = 2023;
+
+  - system: You are an HR SQL assistant. Convert HR-related questions into SQL queries.
+    user: Show employees who are no longer active
+    assistant: |
+      SELECT *
+      FROM employees
+      WHERE status != 'Active';
+
+  - system: You are an HR SQL assistant. Convert HR-related questions into SQL queries.
+    user: Show total number of employees per department
+    assistant: |
+      SELECT department, COUNT(*) AS total_employees
+      FROM employees
+      GROUP BY department;
+
+  - system: You are an HR SQL assistant. Convert HR-related questions into SQL queries.
+    user: Which department has the highest average salary?
+    assistant: |
+      SELECT department, AVG(salary) AS avg_salary
+      FROM employees
+      GROUP BY department
+      ORDER BY avg_salary DESC
+      LIMIT 1;
+
+  - system: You are an HR SQL assistant. Convert HR-related questions into SQL queries.
+    user: Show attendance records for the last 7 days
+    assistant: |
+      SELECT *
+      FROM attendance
+      WHERE date >= CURDATE() - INTERVAL 7 DAY;
+
+  - system: You are an HR SQL assistant. Convert HR-related questions into SQL queries.
+    user: Show employees who were present today
+    assistant: |
+      SELECT e.name
+      FROM employees e
+      JOIN attendance a ON e.emp_id = a.emp_id
+      WHERE a.date = CURDATE()
+      AND a.status = 'Present';
+
+  - system: You are an HR SQL assistant. Convert HR-related questions into SQL queries.
+    user: Show employees with less than 6 working hours today
+    assistant: |
+      SELECT e.name, a.hours_worked
+      FROM employees e
+      JOIN attendance a ON e.emp_id = a.emp_id
+      WHERE a.date = CURDATE()
+      AND a.hours_worked < 6;
+
+  - system: You are an HR SQL assistant. Convert HR-related questions into SQL queries.
+    user: Show total absent days for each employee
+    assistant: |
+      SELECT emp_id, COUNT(*) AS absent_days
+      FROM attendance
+      WHERE status = 'Absent'
+      GROUP BY emp_id;
+
+  - system: You are an HR SQL assistant. Convert HR-related questions into SQL queries.
+    user: Show employees who were absent more than 3 days this month
+    assistant: |
+      SELECT emp_id, COUNT(*) AS absent_days
+      FROM attendance
+      WHERE status = 'Absent'
+      AND MONTH(date) = MONTH(CURDATE())
+      AND YEAR(date) = YEAR(CURDATE())
+      GROUP BY emp_id
+      HAVING absent_days > 3;
+
+  - system: You are an HR SQL assistant. Convert HR-related questions into SQL queries.
+    user: Show payroll records for employee John Doe
+    assistant: |
+      SELECT p.*
+      FROM payroll p
+      JOIN employees e ON p.emp_id = e.emp_id
+      WHERE e.name = 'John Doe';
+
+  - system: You are an HR SQL assistant. Convert HR-related questions into SQL queries.
+    user: Show total deductions for each employee in 2024
+    assistant: |
+      SELECT emp_id, SUM(deductions) AS total_deductions
+      FROM payroll
+      WHERE year = 2024
+      GROUP BY emp_id;
+
+  - system: You are an HR SQL assistant. Convert HR-related questions into SQL queries.
+    user: Show employees whose net salary decreased compared to last month
+    assistant: |
+      SELECT p1.emp_id
+      FROM payroll p1
+      JOIN payroll p2
+        ON p1.emp_id = p2.emp_id
+      WHERE p1.year = YEAR(CURDATE())
+        AND p2.year = YEAR(CURDATE())
+        AND p1.month = MONTH(CURDATE())
+        AND p2.month = MONTH(CURDATE()) - 1
+        AND p1.net_salary < p2.net_salary;
+
+  - system: You are an HR SQL assistant. Convert HR-related questions into SQL queries.
+    user: Show total payroll cost per department for 2024
+    assistant: |
+      SELECT e.department, SUM(p.net_salary) AS total_payroll
+      FROM payroll p
+      JOIN employees e ON p.emp_id = e.emp_id
+      WHERE p.year = 2024
+      GROUP BY e.department;
+
+  - system: You are an HR SQL assistant. Convert HR-related questions into SQL queries.
+    user: Show employees who have never taken leave
+    assistant: |
+      SELECT e.*
+      FROM employees e
+      LEFT JOIN attendance a
+        ON e.emp_id = a.emp_id AND a.status = 'Leave'
+      WHERE a.emp_id IS NULL;
+
+  - system: You are an HR SQL assistant. Convert HR-related questions into SQL queries.
+    user: Show average working hours per employee
+    assistant: |
+      SELECT emp_id, AVG(hours_worked) AS avg_hours
+      FROM attendance
+      GROUP BY emp_id;

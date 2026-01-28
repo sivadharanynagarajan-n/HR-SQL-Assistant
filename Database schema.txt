@@ -1,0 +1,25 @@
+employees(
+  emp_id,
+  name,
+  department,
+  role,
+  salary,
+  joining_date,
+  status
+)
+
+attendance(
+  emp_id,
+  date,
+  status,        -- Present / Absent / Leave
+  hours_worked
+)
+
+payroll(
+  emp_id,
+  month,
+  year,
+  gross_salary,
+  deductions,
+  net_salary
+)
